@@ -1,5 +1,3 @@
-%bcond_without python3
-
 %global srcname Markdown
 %global pkgname markdown
 
@@ -16,7 +14,7 @@ BuildArch:      noarch
 
 
 %description
-This is a Python implementation of John Gruber's Markdown. It is
+This is a Python implementation of Markdown by John Gruber. It is
 almost completely compliant with the reference implementation, though
 there are a few known issues.
 
@@ -30,12 +28,11 @@ Requires:       python2
 %{?python_provide:%python_provide python2-%{pkgname}}
 
 %description -n python2-%{pkgname}
-This is a Python implementation of John Gruber's Markdown. It is
+This is a Python implementation of Markdown by John Gruber. It is
 almost completely compliant with the reference implementation, though
 there are a few known issues.
 
 
-%if %{with python3}
 %package -n python%{python3_pkgversion}-%{pkgname}
 Summary:        Markdown implementation in Python
 Group:          Development/Languages
@@ -45,12 +42,9 @@ Requires:       python%{python3_pkgversion}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{pkgname}}
 
 %description -n python%{python3_pkgversion}-%{pkgname}
-This is a Python implementation of the John Gruber Markdown. It is
+This is a Python implementation of Markdown by John Gruber. It is
 almost completely compliant with the reference implementation, though
 there are a few known issues.
-
-%endif # with python3
-
 
 %prep
 %setup -q -n %{srcname}-%{version}
@@ -67,10 +61,7 @@ find bin docs -type f \
 %build
 %py2_build
 
-%if %{with python3}
 %py3_build
-%endif # with python3
-
 
 %install
 %py2_install
@@ -78,24 +69,18 @@ find bin docs -type f \
 # rename binary
 mv %{buildroot}%{_bindir}/%{pkgname}_py{,-%{python_version}}
 
-%if %{with python3}
 %py3_install
 
 # rename binary
 mv %{buildroot}%{_bindir}/%{pkgname}_py{,-%{python3_version}}
-%endif # with python3
 
 # 2.X binary is called by default for now
 ln -s %{pkgname}_py-%{python_version} %{buildroot}%{_bindir}/markdown_py
 
-
 %check
 %{__python2} run-tests.py -v
 
-%if %{with python3}
 %{__python3} run-tests.py -v || :
-%endif
-
 
 %files -n python2-%{pkgname}
 %license LICENSE.md
@@ -104,16 +89,11 @@ ln -s %{pkgname}_py-%{python_version} %{buildroot}%{_bindir}/markdown_py
 %{_bindir}/%{pkgname}_py
 %{_bindir}/%{pkgname}_py-%{python_version}
 
-
-%if %{with python3}
 %files -n python%{python3_pkgversion}-%{pkgname}
 %license LICENSE.md
 %doc build/docs/*
 %{python3_sitelib}/*
 %{_bindir}/%{pkgname}_py-%{python3_version}
-
-%endif # with python3
-
 
 %changelog
 * Fri Mar 08 2019 Troy Dawson <tdawson@redhat.com> - 2.4.1-4

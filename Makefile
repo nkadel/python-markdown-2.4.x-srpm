@@ -6,7 +6,7 @@
 LANG=C
 
 #MOCKS+=epel-8-x86_64
-MOCKS+=amazonlinux-2-x86_64
+MOCKS+=samba4repo-amz2-x86_64
 
 #MOCKCFGS+=$(MOCKS)
 
